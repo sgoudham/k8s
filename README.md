@@ -1,6 +1,6 @@
 # Server Configuration
 
-At the time of writing, I have one single VPS that I use to host my personal
+At the time of writing, I have a single 10 core [VDS from NetCup](https://www.netcup.eu/vserver/) that I use to host my personal
 projects. Initially, I started out with docker and having folders of compose
 files. I quickly ran into issues re-deploying multiple services at once,
 shoehorning traefik configuration into docker and various other tidbits here and
