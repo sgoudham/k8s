@@ -1,0 +1,34 @@
+crd:
+  enableInstall: true
+
+localprovisioner:
+  enabled: true
+  deviceClass:
+    enabled: false
+  hostpathClass:
+    enabled: true
+    isDefaultClass: true
+ndm:
+  enabled: false
+ndmOperator:
+  enabled: false
+ndmExporter:
+  enabled: false
+webhook:
+  enabled: true
+nfs-provisioner:
+  enabled: false
+mayastor:
+  enabled: false
+jiva:
+  enabled: false
+cstor:
+  enabled: false
+openebs-ndm:
+  enabled: false
+localpv-provisioner:
+  enabled: false
+zfs-localpv:
+  enabled: false
+lvm-localpv:
+  enabled: false

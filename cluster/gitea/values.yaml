@@ -1,0 +1,107 @@
+service:
+  http:
+    type: ClusterIP
+    port: 3000
+  ssh:
+    type: LoadBalancer
+    port: 22
+
+ingress:
+  enabled: true
+  hosts:
+    - host: gitea.goudham.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - gitea.goudham.com
+
+persistence:
+  enabled: true
+  size: 50Gi
+
+gitea:
+  config:
+    APP_NAME: "Hammy's Gitea"
+    RUN_MODE: "prod"
+    RUN_USER: "git"
+    ui:
+      THEMES: "catppuccin-frappe-blue,catppuccin-frappe-flamingo,catppuccin-frappe-green,catppuccin-frappe-lavender,catppuccin-frappe-maroon,catppuccin-frappe-mauve,catppuccin-frappe-peach,catppuccin-frappe-pink,catppuccin-frappe-red,catppuccin-frappe-rosewater,catppuccin-frappe-sapphire,catppuccin-frappe-sky,catppuccin-frappe-teal,catppuccin-frappe-yellow,catppuccin-latte-blue,catppuccin-latte-flamingo,catppuccin-latte-green,catppuccin-latte-lavender,catppuccin-latte-maroon,catppuccin-latte-mauve,catppuccin-latte-peach,catppuccin-latte-pink,catppuccin-latte-red,catppuccin-latte-rosewater,catppuccin-latte-sapphire,catppuccin-latte-sky,catppuccin-latte-teal,catppuccin-latte-yellow,catppuccin-macchiato-blue,catppuccin-macchiato-flamingo,catppuccin-macchiato-green,catppuccin-macchiato-lavender,catppuccin-macchiato-maroon,catppuccin-macchiato-mauve,catppuccin-macchiato-peach,catppuccin-macchiato-pink,catppuccin-macchiato-red,catppuccin-macchiato-rosewater,catppuccin-macchiato-sapphire,catppuccin-macchiato-sky,catppuccin-macchiato-teal,catppuccin-macchiato-yellow,catppuccin-mocha-blue,catppuccin-mocha-flamingo,catppuccin-mocha-green,catppuccin-mocha-lavender,catppuccin-mocha-maroon,catppuccin-mocha-mauve,catppuccin-mocha-peach,catppuccin-mocha-pink,catppuccin-mocha-red,catppuccin-mocha-rosewater,catppuccin-mocha-sapphire,catppuccin-mocha-sky,catppuccin-mocha-teal,catppuccin-mocha-yellow"
+      DEFAULT_THEME: "catppuccin-mocha-pink"
+      THEME_COLOR_META_TAG: "#f5c2e7"
+    ui.meta:
+      AUTHOR: "Hammy's Gitea"
+      DESCRIPTION: "Welcome to my personal space on the internet where I create and manage my personal projects without relying on major centralised services :D"
+      KEYWORDS: "go,git,self-hosted,gitea,goudham,hammy,catppuccin,open-source"
+    api:
+      ENABLE_SWAGGER: "false"
+    i18n:
+      LANGS: "en-US"
+      NAMES: "English"
+    session:
+      PROVIDER: "db"
+      COOKIE_SECURE: "true"
+    service:
+      DISABLE_REGISTRATION: "true"
+    repository.pull-request:
+      DEFAULT_MERGE_STYLE: "rebase"
+    server:
+      LFS_START_SERVER: "true"
+      SSH_EXPOSE_ANONYMOUS: "true"
+  ssh:
+    logLevel: "INFO"
+  livenessProbe:
+    enabled: true
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 200
+    timeoutSeconds: 1
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 10
+  readinessProbe:
+    enabled: true
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+
+memcached:
+  enabled: true
+  service:
+    ports:
+      memcached: 11211
+postgresql:
+  enabled: true
+  global:
+    postgresql:
+      auth:
+        database: gitea
+        username: gitea
+        existingSecret: postgres-password
+      service:
+        ports:
+          postgresql: 5432
+  primary:
+    persistence:
+      size: 10Gi
+
+# https://gitea.com/gitea/helm-chart/issues/414
+statefulset:
+  env:
+    - name: ENV_TO_INI__database__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: postgres-password
+          key: password
+
+checkDeprecation: true
+test:
+  enabled: true
+  image:
+    name: busybox
+    tag: latest

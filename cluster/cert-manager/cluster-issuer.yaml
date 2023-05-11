@@ -1,0 +1,25 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: sgoudham@gmail.com
+    privateKeySecretRef:
+      name: le-goudham-com
+    solvers:
+      - selector:
+          dnsZones:
+            - goudham.com
+        dns01:
+          webhook:
+            groupName: porkbun
+            solverName: porkbun
+            config:
+              apiKeySecretRef:
+                name: porkbun-key
+                key: api-key
+              secretKeySecretRef:
+                name: porkbun-key
+                key: secret-key

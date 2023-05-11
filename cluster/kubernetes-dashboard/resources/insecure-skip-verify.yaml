@@ -1,0 +1,13 @@
+# It's VERY hard to verify that kubernetes certificates are signed by them.
+# Mostly due to: https://github.com/kubernetes/dashboard/issues/4684
+
+# Traefik's insecureSkipVerify doesn't validate the internal chain of certifictes
+# and therefore allows the entire thing to work. DON'T ACTUALLY RUN THIS IN PRODUCTION
+# ref: https://doc.traefik.io/traefik/routing/services/#insecureskipverify
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: insecure-skip-verify
+  namespace: kubernetes-dashboard
+spec:
+  insecureSkipVerify: true

@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: website
+  name: website
+  namespace: website
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+    traefik.ingress.kubernetes.io/router.middlewares: website-drop-www-redirect@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: goudham.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: website
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
+    - host: www.goudham.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: website
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - goudham.com
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: drop-www-redirect
+spec:
+  redirectRegex:
+    regex: ^https://www.goudham.com/(.*)
+    replacement: https://goudham.com/${1}

@@ -1,0 +1,33 @@
+deployment:
+  enabled: true
+  kind: Deployment
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+ports:
+  traefik:
+    expose: false
+    port: 9000
+  web:
+    redirectTo: websecure
+  websecure:
+    http3:
+      enabled: true
+    tls:
+      enabled: true
+service:
+  enabled: true
+  spec:
+    externalTrafficPolicy: Local
+    loadBalancerIP: 185.162.251.168
+  type: LoadBalancer
+extraObjects:
+  - apiVersion: traefik.containo.us/v1alpha1
+    kind: TLSStore
+    metadata:
+      name: default
+      namespace: traefik
+    spec:
+      defaultCertificate:
+        secretName: goudham-com-cert

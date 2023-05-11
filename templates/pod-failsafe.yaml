@@ -1,0 +1,20 @@
+# If I screw up the files on a volume that prevent a pod from booting up,
+# I can use this temporary pod which attaches to the volume to fix my mistakes.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu
+spec:
+  containers:
+  - name: ubuntu
+    resources: {}
+    image: ubuntu:latest
+    command: [ "/bin/bash", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+    volumeMounts:
+      - mountPath: /data
+        name: data
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: minecraft-minecraft-datadir

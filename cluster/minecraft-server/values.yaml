@@ -1,0 +1,88 @@
+resources:
+  requests:
+    memory: 3096Mi
+
+strategyType: Recreate
+
+livenessProbe:
+  command:
+    - mc-health
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  failureThreshold: 20
+  successThreshold: 1
+  timeoutSeconds: 1
+readinessProbe:
+  command:
+    - mc-health
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  failureThreshold: 20
+  successThreshold: 1
+  timeoutSeconds: 1
+startupProbe:
+  command:
+    - mc-health
+  enabled: false
+  failureThreshold: 30
+  periodSeconds: 10
+
+minecraftServer:
+  eula: "TRUE"
+  version: "1.19.4"
+  type: "VANILLA"
+  difficulty: normal
+  whitelist: "Hamothy_,Aishwxyra"
+  viewDistance: 16
+  motd: "Criminal Offensive Side-EYE"
+  pvp: true
+  levelType: DEFAULT
+  worldSaveName: MyWorld
+  memory: 2512M
+  overrideServerProperties: true
+  serviceType: ClusterIP
+  servicePort: 25565
+
+  rcon:
+    enabled: true
+    existingSecret: minecraft-rcon
+    secretKey: rcon-password
+
+persistence:
+  dataDir:
+    enabled: true
+    Size: 10Gi
+
+mcbackup:
+  enabled: true
+
+  image:
+    repository: itzg/mc-backup
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  initialDelay: 2m
+  backupInterval: "2h"
+  pauseIfNoPlayers: "true"
+  pruneBackupsDays: 14
+  rconRetries: 5
+  rconRetryInterval: 10s
+  excludes: "*.jar,cache,logs"
+  backupMethod: tar
+  destDir: /backups
+  linkLatest: "false"
+  compressMethod: "gzip"
+
+  resources:
+    requests:
+      memory: 512Mi
+
+  persistence:
+    backupDir:
+      enabled: true
+      Size: 20Gi
+
+deploymentLabels:
+  cursed: minecraft
+podLabels:
+  cursed: minecraft
