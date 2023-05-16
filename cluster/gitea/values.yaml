@@ -1,3 +1,9 @@
+image:
+  registry: "eu.gcr.io"
+  repository: sanctureplicum/gitea-nyx
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.19.3"
+
 service:
   http:
     type: ClusterIP
