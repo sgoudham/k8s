@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: pastebin-ingress
+  name: pastebin-ingress
+  namespace: pastebin
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: paste.goudham.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: pastebin-http
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - paste.goudham.com

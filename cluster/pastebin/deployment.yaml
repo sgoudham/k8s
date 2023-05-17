@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pastebin
+  name: pastebin
+  namespace: pastebin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pastebin
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: pastebin
+    spec:
+      volumes:
+        - name: pastebin-pv
+          persistentVolumeClaim:
+            claimName: pastebin-pvc
+      containers:
+        - image: ghcr.io/robherley/snips.sh:latest
+          imagePullPolicy: IfNotPresent
+          name: pastebin
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 2222
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 8080
+          volumeMounts:
+            - mountPath: "/data"
+              name: pastebin-pv
+          env:
+            - name: SNIPS_HTTP_EXTERNAL
+              value: "https://paste.goudham.com"
+            - name: SNIPS_SSH_EXTERNAL
+              value: "ssh://paste.goudham.com:2222"
+            - name: SNIPS_HMACKEY
+              valueFrom:
+                secretKeyRef:
+                  name: hmac
+                  key: signing-key
+          resources: {}
