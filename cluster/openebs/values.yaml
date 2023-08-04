@@ -8,6 +8,9 @@ localprovisioner:
   hostpathClass:
     enabled: true
     isDefaultClass: true
+    ext4Quota:
+      enabled: true
+
 ndm:
   enabled: false
 ndmOperator:
