@@ -1,6 +1,8 @@
 resources:
   requests:
-    memory: 3096Mi
+    memory: "7512M"
+  limits:
+    memory: "8512M"
 
 strategyType: Recreate
 
@@ -27,21 +29,26 @@ startupProbe:
   failureThreshold: 30
   periodSeconds: 10
 
+deploymentLabels:
+  load-balancer: minecraft
+podLabels:
+  load-balancer: minecraft
+
 minecraftServer:
   eula: "TRUE"
-  version: "1.19.4"
-  type: "VANILLA"
+  version: "1.20.1"
+  type: "FORGE"
+  forgeVersion: "47.1.33"
   difficulty: normal
-  whitelist: "Hamothy_,Aishwxyra"
-  viewDistance: 16
+  whitelist: "Hamothy_,Aishwxrya"
+  ops: "Hamothy_,Aishwxrya"
+  viewDistance: 32
   motd: "Criminal Offensive Side-EYE"
   pvp: true
   levelType: DEFAULT
-  worldSaveName: MyWorld
-  memory: 2512M
-  overrideServerProperties: true
-  serviceType: ClusterIP
-  servicePort: 25565
+  worldSaveName: ForgeModdedSurvival
+  memory: 6512M
+  maxWorldSize: 5999968
 
   rcon:
     enabled: true
@@ -64,14 +71,14 @@ mcbackup:
   initialDelay: 2m
   backupInterval: "2h"
   pauseIfNoPlayers: "true"
-  pruneBackupsDays: 14
+  pruneBackupsDays: 3
   rconRetries: 5
   rconRetryInterval: 10s
   excludes: "*.jar,cache,logs"
   backupMethod: tar
   destDir: /backups
-  linkLatest: "false"
-  compressMethod: "gzip"
+  linkLatest: "true"
+  compressMethod: "zstd"
 
   resources:
     requests:
@@ -81,8 +88,3 @@ mcbackup:
     backupDir:
       enabled: true
       Size: 20Gi
-
-deploymentLabels:
-  cursed: minecraft
-podLabels:
-  cursed: minecraft

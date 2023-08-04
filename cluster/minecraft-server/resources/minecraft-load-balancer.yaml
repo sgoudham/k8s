@@ -5,7 +5,7 @@ metadata:
   namespace: minecraft-server
 spec:
   selector:
-    cursed: minecraft
+    load-balancer: minecraft
   type: LoadBalancer
   ports:
     - name: minecraft
