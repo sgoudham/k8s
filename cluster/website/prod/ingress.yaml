@@ -39,6 +39,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: drop-www-redirect
+  namespace: website
 spec:
   redirectRegex:
     regex: ^https://www.goudham.com/(.*)

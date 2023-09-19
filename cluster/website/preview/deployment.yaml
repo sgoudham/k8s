@@ -2,14 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: website
-  name: website
+    app: website-preview
+  name: website-preview
   namespace: website
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: website
+      app: website-preview
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,12 +22,12 @@ spec:
   template:
     metadata:
       labels:
-        app: website
+        app: website-preview
     spec:
       containers:
-      - image: sgoudham/website:latest
+      - image: sgoudham/website:preview
         imagePullPolicy: IfNotPresent
-        name: website
+        name: website-preview
         ports:
         - containerPort: 3000
           protocol: TCP
