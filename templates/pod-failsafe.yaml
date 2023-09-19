@@ -17,4 +17,4 @@ spec:
   volumes:
     - name: data
       persistentVolumeClaim:
-        claimName: minecraft-minecraft-datadir
+        claimName: <insert-claim-name-here>
