@@ -70,12 +70,6 @@ cluster.
 - https://release.com/blog/kubernetes-secrets-management-a-practical-guide
 - https://faun.pub/free-ha-multi-architecture-kubernetes-cluster-from-oracle-c66b8ce7cc37
 
-## TODO
-
-- [ ] Setup [keel.sh](https://keel.sh/) for automatically retrieving the latest
-      docker hub images and re-deploying my services.
-- [ ] Experiment with a two-node cluster using Oracle's [Always Free](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm) tier.
-
 ## Acknowledgement
 
 Sincere thanks to one of my best friends
